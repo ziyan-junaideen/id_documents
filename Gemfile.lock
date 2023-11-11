@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     id_documents (0.1.0)
+      zeitwerk (~> 2.6)
 
 GEM
   remote: https://rubygems.org/
@@ -47,6 +48,7 @@ GEM
       parser (>= 3.2.1.0)
     ruby-progressbar (1.13.0)
     unicode-display_width (2.5.0)
+    zeitwerk (2.6.12)
 
 PLATFORMS
   x86_64-darwin-22
