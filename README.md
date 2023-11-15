@@ -1,24 +1,52 @@
 # IDDocuments
 
-TODO: Delete this and the text below, and describe your gem
+IDDocuments is a Ruby gem that can help validate the correctness of ID documents. Use it to validate the pattern of the
+document number. When applicable you will also have access to metadata embedded in the document number (ex: LKA NIC
+includes date of birth, gender, and a checksum to validate integrity of the number).
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/id_documents`. To experiment with that code, run `bin/console` for an interactive prompt.
+This library is not a replacement for a proper KYC solution similar to Veriff. Use it more like a form validation or
+applicable as a meta data extractor. The original intent of this library is to check a users age against the NIC
+number.
+
+> This project is WIP and not ready for production use.
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
+To use the gem outside a Ruby project, install the gem:
 
-Install the gem and add to the application's Gemfile by executing:
+```rb
+gem install id_documents
+```
 
-    $ bundle add UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
+To use the gem in a Ruby project, add the following to the Gemfile:
 
-If bundler is not being used to manage dependencies, install the gem by executing:
-
-    $ gem install UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
+```rb
+gem 'id_documents'
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+The GEM provides an command line interface and a Ruby API.
+
+```sh
+id_documents --country LKA --metadata 197419202757
+```
+
+```rb
+require 'id_documents'
+
+parser = IDDocuments::Parser.new(country: 'LKA')
+document = parser.parse('197419202757')
+
+document.valid? # true
+document.metadata['dob'] # 1974-07-10
+document.metadata['gender'] # :male
+```
+
+## Coverage
+
+Development of this GEM will be done in stages. The first stage will be targeting South Asia in general and Sri Lanka
+and India in particular. It will then be expanded to Europe.
 
 ## Development
 
