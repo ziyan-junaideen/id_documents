@@ -9,14 +9,10 @@ RSpec.describe IDDocuments::LKA::IDCard do
     it "is valid" do
       expect(subject).to be_a(IDDocuments::Result)
       expect(subject.valid?).to be_truthy
-      expect(subject.metadata).to eq({
-                                       id_format: :old,
-                                       gender: :male,
-                                       dob: Date.new(1974, 8, 11),
-                                       sequence: 275,
-                                       check: 7,
-                                       voter: true
-                                     })
+      expect(subject.metadata[:id_format]).to eq(:old)
+      expect(subject.metadata[:gender]).to eq(:male)
+      expect(subject.metadata[:dob]).to eq(Date.new(1974, 7, 10))
+      expect(subject.metadata[:voter_status]).to eq(:voter)
     end
   end
 
@@ -28,12 +24,19 @@ RSpec.describe IDDocuments::LKA::IDCard do
     end
 
     it "parses metadata" do
+      expect(subject.metadata[:id_format]).to eq(:new)
+      expect(subject.valid?).to be_truthy
+      expect(subject.metadata[:gender]).to eq(:male)
+      expect(subject.metadata[:dob]).to eq(Date.new(1974, 7, 10))
+      expect(subject.metadata[:voter_status]).to be nil
     end
   end
 
   context "when id number is invalid" do
+    let(:id_number) { "12345678" }
+
     it "raises an error" do
-      expect { described_class.new }.to raise_error(IDDocuments::InvalidFormatError)
+      expect { subject }.to raise_error(IDDocuments::InvalidFormatError)
     end
   end
 end

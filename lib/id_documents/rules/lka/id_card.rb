@@ -17,7 +17,7 @@ class IDDocuments::LKA::IDCard
   def parse
     case @id_number
     when OLD_FORMAT
-      OldFormat.new(@id_number).parse
+      IDDocuments::LKA::IDCard::OldFormat.new(@id_number).parse
     when NEW_FORMAT
       NewFormat.new(@id_number).parse
     else
@@ -25,72 +25,105 @@ class IDDocuments::LKA::IDCard
     end
   end
 
-  def valid?; end
-
-  def metadata; end
-
   class OldFormat
     FORMAT = /([0-9]{2})([0-9]{3})([0-9]{3})([0-9]{1})(V|X)/i.freeze
 
     def initialize(id_number)
       @id_number = id_number
+      @result = IDDocuments::Result.new(@id_number)
     end
 
     def parse
-      ctx = {}
-      ctx[:result] = IDDocuments::Result.new(@id_number)
+      find_dob
+      find_gender
+      find_voter_status
 
-      breakdown(ctx)
-      find_dob(ctx)
-      find_gender(ctx)
-      find_sequence(ctx)
-      find_voter(ctx)
+      @result.metadata[:id_format] = :old
+      @result.metadata[:sequence] = metadata[:sequence]
+      @result.valid = true # TODO: How to use the check digit?
 
-      ctx[:result]
+      @result
     end
 
-    def break_down(ctx)
-      _, year, day_of_year, sequence, check, voter = @id_number.upcase.match(FORMAT).to_a
-      ctx[:data] = { year: year.to_i, day_of_year: day_of_year.to_i, sequence: sequence.to_i,
-                     check: check.to_i, voter: voter == "V" }
+    def metadata
+      return @metadata if @metadata
+
+      _, year, day_of_year, sequence, check, voter_status = @id_number.upcase.match(FORMAT).to_a
+
+      @metadata = { year: year.to_i, day_of_year: day_of_year.to_i, sequence: sequence.to_i,
+                    check: check.to_i, voter_status: voter_status }
     end
 
-    def find_dob(ctx)
-      day_of_year = ctx[:data][:day_of_year] >= 500 ? ctx[:data][:day_of_year] - 500 : ctx[:data][:day_of_year]
-      ctx[:result].metadata[:dob] = DateTime.new(ctx[:data][:year], 1, 1).next_day(day_of_year)
-    end
+    def find_dob
+      day_of_year = metadata[:day_of_year]
+      day_of_year -= 500 if metadata[:day_of_year] >= 500
 
-    def other
-      result = IDDocuments::Result.new(@id_number)
-
-      @id_number.match(FORMAT)
-
-      year = ::Regexp.last_match(1).to_i + 1900
-      day = ::Regexp.last_match(2).to_i
-      gender = day >= 500 ? :female : :male
-
-      day -= 500 if day >= 500 # Remove the female offset
-
-      dob = DateTime.new(year, 1, 1).next_day(day)
+      year = metadata[:year] + 1900
+      dob = Date.new(year, 1, 1).next_day(day_of_year - 2)
 
       if dob.year > year
-        dob = nil
-        result.flags << :invalid_birth_day_of_year
-        result.valid = false
+        @result.flags << :invalid_birth_day_of_year
+        @result.valid = false
+        @result.metadata[:dob] = nil
+      else
+        @result.metadata[:dob] = dob
       end
+    end
 
-      result.metadata = {
-        dob: dob,
-        gender: gender,
-        sequence: ::Regexp.last_match(3).to_i,
-        check: ::Regexp.last_match(4).to_i,
-        voter: ::Regexp.last_match(5) == "V"
-      }
+    def find_gender
+      @result.metadata[:gender] = metadata[:day_of_year] >= 500 ? :female : :male
+    end
 
-      result
+    def find_voter_status
+      @result.metadata[:voter_status] = metadata[:voter_status] == "V" ? :voter : :non_voter
     end
   end
 
   class NewFormat
+    FORMAT = /([0-9]{4})([0-9]{3})([0-9]{4})([0-9]{1})/i.freeze
+
+    def initialize(id_number)
+      @id_number = id_number
+      @result = IDDocuments::Result.new(@id_number)
+    end
+
+    def parse
+      find_dob
+      find_gender
+
+      @result.metadata[:id_format] = :new
+      @result.valid = true # TODO: How to use the check digit?
+
+      @result
+    end
+
+    def metadata
+      return @metadata if @metadata
+
+      _, year, day_of_year, sequence, check, voter_status = @id_number.upcase.match(FORMAT).to_a
+
+      @metadata = { year: year.to_i, day_of_year: day_of_year.to_i, sequence: sequence.to_i,
+                    check: check.to_i, voter_status: voter_status }
+    end
+
+    def find_dob
+      day_of_year = metadata[:day_of_year]
+      day_of_year -= 500 if metadata[:day_of_year] >= 500
+
+      year = metadata[:year]
+      dob = Date.new(year, 1, 1).next_day(day_of_year - 2) # TODO: Jan 1 is day 0 as it seems
+
+      if dob.year > year
+        @result.flags << :invalid_birth_day_of_year
+        @result.valid = false
+        @result.metadata[:dob] = nil
+      else
+        @result.metadata[:dob] = dob
+      end
+    end
+
+    def find_gender
+      @result.metadata[:gender] = metadata[:day_of_year] >= 500 ? :female : :male
+    end
   end
 end

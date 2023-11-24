@@ -3,6 +3,7 @@
 # The parsed result of the ID document
 class IDDocuments::Result
   attr_accessor :flags, :id_number, :metadata, :valid
+  alias valid? valid
 
   def initialize(id_number)
     @id_number = id_number
