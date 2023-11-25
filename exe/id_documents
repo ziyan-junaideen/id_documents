@@ -37,10 +37,12 @@ OptionParser.new do |opts|
 
   opts.on("-v", "--version", "Prints version") { options[:version] = true }
   opts.on("-i", "--info", "Prints information") { options[:info] = true }
+end.parse!
 
-  puts message if options[:info]
-  puts "IDDocuments version #{IDDocuments::VERSION}" if options[:version]
+puts message if options[:info]
+puts "IDDocuments version #{IDDocuments::VERSION}" if options[:version]
 
-  puts IDDocuments.parse(options[:country], options[:type], options[:number])
-end
+return unless options[:number] && options[:type] && options[:country]
+
+puts IDDocuments.parse(options[:country], options[:type], options[:number])
 # vi: ft=ruby
