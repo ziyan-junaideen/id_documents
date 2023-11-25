@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
-class IDDocuments
+module IDDocuments
   class InvalidFormatError < Error; end
 end
