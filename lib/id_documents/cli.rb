@@ -4,9 +4,9 @@ require "artii"
 
 class IDDocuments::CLI < Thor
   desc "parse ID_NUMBER", "Determins the validity of the ID number and extract metadata"
-  method_option :country, alias: "-c", type: :string, required: true
-  method_option :type, alias: "-t", type: :string, required: true
-  method_option :number, alias: "-n", type: :string, required: true
+  method_option :country, aliases: "-c", type: :string, required: true
+  method_option :type, aliases: "-t", type: :string, required: true
+  method_option :number, aliases: "-n", type: :string, required: true
   def parse
     puts IDDocuments.parse(options[:country].to_sym, options[:type].to_sym, options[:number]).pp
   end
