@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# Parser for National ID card issued prior to 2015
+# @see https://en.wikipedia.org/wiki/National_identity_cards_in_Sri_Lanka
 class IDDocuments::LKA::IDCardOldFormat
   FORMAT = /([0-9]{2})([0-9]{3})([0-9]{3})([0-9]{1})(V|X)/i.freeze
 
