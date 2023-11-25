@@ -44,5 +44,5 @@ puts "IDDocuments version #{IDDocuments::VERSION}" if options[:version]
 
 return unless options[:number] && options[:type] && options[:country]
 
-puts IDDocuments.parse(options[:country], options[:type], options[:number])
+puts IDDocuments.parse(options[:country], options[:type], options[:number]).pp
 # vi: ft=ruby
