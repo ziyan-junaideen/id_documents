@@ -1,0 +1,48 @@
+#!/usr/bin/env ruby
+
+require "optparse"
+require "artii"
+
+require "bundler/setup"
+require "id_documents"
+
+artii = Artii::Base.new font: "standard"
+message = """
+#{artii.asciify("IDDocuments")}
+by Ziyan Junaideen
+
+A variety of documents are used globally to verify a person's identity.
+Businesses could use document numbers and embedded metadata (date of birth,
+gender, etc) in supported documents as a first line of defense against fraud.
+
+IDDocuments intends to provide a unified interface to validate ID document
+numbers.
+"""
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: id_documents [options]"
+
+  opts.on("-n", "--number NUMBER", "ID document number") do |n|
+    options[:number] = n
+  end
+
+  opts.on("-t", "--type TYPE", "ID document type") do |t|
+    options[:type] = t.to_sym
+  end
+
+  opts.on("-c", "--country COUNTRY", "ID document country") do |c|
+    options[:country] = c.to_sym
+  end
+
+  opts.on("-v", "--version", "Prints version") { options[:version] = true }
+  opts.on("-i", "--info", "Prints information") { options[:info] = true }
+end.parse!
+
+puts message if options[:info]
+puts "IDDocuments version #{IDDocuments::VERSION}" if options[:version]
+
+return unless options[:number] && options[:type] && options[:country]
+
+puts IDDocuments.parse(options[:country], options[:type], options[:number]).pp
+# vi: ft=ruby

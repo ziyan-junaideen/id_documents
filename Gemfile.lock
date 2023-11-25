@@ -2,11 +2,13 @@ PATH
   remote: .
   specs:
     id_documents (0.1.0)
+      artii (~> 2.1)
       zeitwerk (~> 2.6)
 
 GEM
   remote: https://rubygems.org/
   specs:
+    artii (2.1.2)
     ast (2.4.2)
     debug (1.8.0)
       irb (>= 1.5.0)
