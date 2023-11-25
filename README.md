@@ -35,18 +35,31 @@ id_documents --country LKA --metadata 197419202757
 ```rb
 require 'id_documents'
 
-parser = IDDocuments::Parser.new(country: 'LKA')
-document = parser.parse('197419202757')
+result = IDDocuments.parse(:LKA, :national_id, "197419202757")
 
-document.valid? # true
-document.metadata['dob'] # 1974-07-10
-document.metadata['gender'] # :male
+result.valid? # true
+result.metadata['dob'] # 1974-07-10
+result.metadata['gender'] # :male
 ```
 
-## Coverage
+## Document Coverage
 
-Development of this GEM will be done in stages. The first stage will be targeting South Asia in general and Sri Lanka
-and India in particular. It will then be expanded to Europe.
+Development of this GEM will be done in stages. Current planned trajectory:
+
+- Stage 1: Sri Lanka (completed by first release)
+- Stage 2: South Asia
+- Stage 3: South East Asia
+- Stage 4: Europe
+- Stage 5: North America
+- Stage 6: South America
+- Stage 7: Africa
+
+How ever, if you are interested in implementing a parser for your country, feel
+free to open a PR. This is merely my personal roadmap for a hobby project.
+
+If you are not a developer, hit me on Twitter and I will
+see if I can find some time to research about ID documents in your country and
+implement the parser.
 
 ## Development
 
