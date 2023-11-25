@@ -4,7 +4,6 @@
 # require "optparse"
 
 require "bundler/setup"
-require "id_documents"
 require "id_documents/cli"
 
 IDDocuments::CLI.start

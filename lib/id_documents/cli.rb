@@ -1,3 +1,4 @@
+require "id_documents"
 require "thor"
 require "artii"
 
