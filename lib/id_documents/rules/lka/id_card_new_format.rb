@@ -31,7 +31,7 @@ class IDDocuments::LKA::IDCardNewFormat
                   check: check.to_i, voter_status: voter_status }
   end
 
-  # rubocop:disable Metrics/MethodLength Metrics/AbcSize
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def find_dob
     day_of_year = metadata[:day_of_year]
     day_of_year -= 500 if metadata[:day_of_year] >= 500
@@ -47,7 +47,7 @@ class IDDocuments::LKA::IDCardNewFormat
       @result.metadata[:dob] = dob
     end
   end
-  # rubocop:enable Metrics/MethodLength Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   def find_gender
     @result.metadata[:gender] = metadata[:day_of_year] >= 500 ? :female : :male
