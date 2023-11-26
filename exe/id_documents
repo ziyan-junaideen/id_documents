@@ -1,8 +1,5 @@
 #!/usr/bin/env ruby
 
-# require "artii"
-# require "optparse"
-
 require "bundler/setup"
 require "id_documents/cli"
 
