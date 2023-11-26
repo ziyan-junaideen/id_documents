@@ -10,7 +10,12 @@ Gem::Specification.new do |spec|
 
   spec.summary = "ID Document validator and metadata extractor."
   spec.description = <<-DESC
-    id_documents is a Ruby library for validating and extracting meta data from ID documents.
+ A variety of documents are used globally to verify a person's identity.
+ Businesses could use document numbers and embedded metadata (date of birth,
+ gender, etc) in supported documents as a first line of defense against fraud.
+
+ IDDocuments intends to provide a unified interface to validate ID document
+ numbers.
   DESC
   spec.homepage = "https://github.com/ziyan-junaideen/id_documents"
   spec.license = "MIT"
@@ -19,8 +24,9 @@ Gem::Specification.new do |spec|
   # spec.metadata["allowed_push_host"] = "TODO: Set to your gem server 'https://example.com'"
 
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "https://github.com/ziyan-junaideen/id_documents"
-  spec.metadata["changelog_uri"] = "https://github.com/ziyan-junaideen/id_documents/blob/main/CHANGELOG.md"
+  spec.metadata["source_code_uri"] = "https://github.com/ziyan-junaideen/id_documents/tree/v#{IDDocuments::VERSION}"
+  spec.metadata["changelog_uri"] = "https://github.com/ziyan-junaideen/id_documents/releases/tag/v#{IDDocuments::VERSION}"
+  spec.metadata["wiki_uri"] = "https://github.com/ziyan-junaideen/id_documents/wiki"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
