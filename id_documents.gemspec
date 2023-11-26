@@ -2,6 +2,7 @@
 
 require_relative "lib/id_documents/version"
 
+# rubocop:disable Metrics/BlockLength
 Gem::Specification.new do |spec|
   spec.name = "id_documents"
   spec.version = IDDocuments::VERSION
@@ -48,3 +49,4 @@ Gem::Specification.new do |spec|
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html
 end
+# rubocop:enable Metrics/BlockLength
