@@ -6,6 +6,7 @@ require_relative "id_documents/inflector"
 
 loader = Zeitwerk::Loader.for_gem
 loader.inflector = IDDocuments::Inflector.new(__FILE__)
+loader.inflector.inflect("cli" => "CLI")
 loader.collapse("#{__dir__}/id_documents/rules")
 loader.collapse("#{__dir__}/id_documents/errors")
 loader.setup
@@ -13,9 +14,7 @@ loader.setup
 module IDDocuments
   # The current version of the GEM.
   # @return [String] the version of the gem (ie: x.y.z)
-  def self.version
-    VERSION
-  end
+  def self.version; end
 
   # Parse an ID document number.
   # @param country [Symbol] the country code (ie: LKA for Sri Lanka)
