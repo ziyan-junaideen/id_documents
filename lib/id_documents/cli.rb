@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "id_documents"
 require "thor"
 require "artii"
