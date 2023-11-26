@@ -14,7 +14,11 @@ jobs:
     strategy:
       matrix:
         ruby:
-          - [2.6.8, 2.7.7, 3.1.4, 3.2.2]
+          - 2.6.8
+          - 2.7.7
+          - 3.0.6
+          - 3.1.4
+          - 3.2.2
 
     steps:
       - uses: actions/checkout@v3
